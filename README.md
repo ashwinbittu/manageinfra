@@ -28,16 +28,27 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+This project does the following:
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+It uses reuse the `ec2` and `key-pair` modules to provision 3 instances with the following properties passed in as input parameters:
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+- Instance Type: `t3.micro`
+- Tags: Add a `Name` tag that is unique for each instance.
 
-Use the `BLANK_README.md` to get started.
+It has also been decided that each EC2 instance needs to be provisioned in the following Availability Zones and Subnets.
+
+| Subnet | Availability Zone |
+|--------|-------------------|
+| subnet-az-2a | ap-southeast-2a |
+| subnet-az-2b | ap-southeast-2b |
+| subnet-az-2c | ap-southeast-2c |
+
+<br>
+
+Also output the following values:
+
+1. A list of all Instance IDs.
+2. The Public and Private key of the Key Pair as a Map
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
