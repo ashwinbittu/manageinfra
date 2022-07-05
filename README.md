@@ -19,7 +19,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-In this project we deploy the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region. As part of this the following AWS resources are created:
+In this project we deploy the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region. We will be using Terraform Cloud account for storing the ENV state and its provisiononig purposes. All the Terraform calls with be done using <a href="https://github.com/hashicorp/terraform-guides/tree/master/operations/automation-script">`Terraform API`</a> and NOT CLI. As part of this the following AWS resources are created:
 
 * The script uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>  to provision 3 `t3.micro` EC2 instances in the following Availability Zones and Subnets.
 
@@ -52,6 +52,7 @@ Following are the output values after running the script:
 * You already have an AWS free tier account with Admin access.
 * You already have a Terraform Cloud free tier account. Please follow this link to find out how: 
 * You already created an API Token from the Users section Terraform Cloud free tier account. Please follow this link to find out how: 
+* You already have created an Orginization in Terraform Cloud free tier account. Please follow this link to find out how: 
 * You already have/Created Personalized Access Token to access the following GitHub repos through script:
     * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>
     * <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a>
@@ -60,25 +61,27 @@ Following are the output values after running the script:
 
     Please follow this link to find out how to create Personalized Access Token in GitHub.
 
-* You already have have AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY pair which can be used to access the AWS ENV through any CLI. Please follow this link to find out how: 
+* You already have integrated/Conncted your Terraform Organization with the above GitHub(Repo). Please follow this link to find out how: 
+* You already have published both the modules terraform-aws-ec2-contino & terraform-aws-key-pair-contino in your Orginization's registry. Please follow this link to find out how:
+* You already have an existing AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY pair which can be used to access the AWS ENV through any CLI. Please follow this link to find out how: 
+* You have Putty Installed on your Desktop.
 
 
 ### Installation
 
-1. Get a t2.micro Amazon Linux EC2 Instance. This is for Running the script.
+1. Get a t2.micro Amazon Linux EC2 Instance(This is for Running the script). Logon to the instnace Putty.
 2. Install jq : sudo yum install jq -y
-3. Install git : sudo yum install jq -y
+3. Install git : sudo yum install git -y
 4. Clone the repo
    ```sh
    git clone https://github.com/ashwinbittu/managecontinoinfra.git
       ```
 3. Give appropriate permission to the file manageinfra.sh for executing it.
 4. Open the file manageinfra.sh in vi editor & update the following entries with the values already mentioned in the <a href="#Prerequisites">Prerequisites</a> section.
-    * TFE_TOKEN="<TFE_TOKEN>" 
+    * TFE_TOKEN="<TFE_TOKEN>"
     * TFE_ORG="<TFE-ORG>"
-    * TFE_ADDR="app.terraform.io"
     * execdir="<SCRIPT-EXEC-DIR>"
-    * REPO_API_TOKEN="<GITHUB_Personal Access Token>" 
+    * REPO_API_TOKEN="<GITHUB_Personal Access Token>"
     * REPO_FID="<GITHUB_USER_ID>"
     * AWS_ACCESS_KEY_ID="<AWS_ACCESS_KEY_ID>"
     * AWS_SECRET_ACCESS_KEY="<AWS_SECRET_ACCESS_KEY>"
