@@ -30,12 +30,9 @@
 
 This project does the following:
 
-It uses reuse the <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a> and `key-pair` modules to provision 3 instances with the following properties passed in as input parameters:
+Here the script deploys the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in your AWS account but in ap-southeast-2 region.
 
-- Instance Type: `t3.micro`
-- Tags: Add a `Name` tag that is unique for each instance.
-
-It has also been decided that each EC2 instance needs to be provisioned in the following Availability Zones and Subnets.
+The script uses existing Terraform Modules <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a> and <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a> modules to provision 3 `t3.micro` instances in the following Availability Zones and Subnets.
 
 | Subnet | Availability Zone |
 |--------|-------------------|
