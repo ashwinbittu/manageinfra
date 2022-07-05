@@ -28,11 +28,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project does the following:
+Here Running the script manageInfra.sh deploys the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region.
 
-Here the script deploys the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in your AWS account but in ap-southeast-2 region.
-
-The script uses existing Terraform Modules <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a> and <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a> modules to provision 3 `t3.micro` instances in the following Availability Zones and Subnets.
+The script uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>  to provision 3 `t3.micro` instances in the following Availability Zones and Subnets.
 
 | Subnet | Availability Zone |
 |--------|-------------------|
@@ -40,12 +38,19 @@ The script uses existing Terraform Modules <a href="https://github.com/ashwinbit
 | subnet-az-2b | ap-southeast-2b |
 | subnet-az-2c | ap-southeast-2c |
 
+The script also uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a> to provision a Key pair as well.
+
 <br>
 
-Also output the following values:
+Following are the input parameters while running the script:
 
-1. A list of all Instance IDs.
-2. The Public and Private key of the Key Pair as a Map
+- Instance Type: `t3.micro`
+- Tags: Add a `Name` tag that is unique for each instance.
+
+Following are the output values after running the script:
+
+1. List of thre 3 Instance IDs and its Names
+2. Map value of the Key Name, its Private and Public Keys.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -65,7 +70,8 @@ _Below is an example of how you can instruct your audience on installing and set
 
 1. Get a t2.micro Amazon Linux EC2 Instance
 2. Install jq : sudo yum install jq -y
-3. Clone the repo
+3. Install git : sudo yum install jq -y
+4. Clone the repo
    ```sh
    git clone https://github.com/ashwinbittu/managecontinoinfra.git
       ```
