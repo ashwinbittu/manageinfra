@@ -19,7 +19,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-In this project we deploy the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region. We will be using Terraform Cloud account for storing the ENV state and its provisiononig purposes. All the Terraform calls with be done using <a href="https://github.com/hashicorp/terraform-guides/tree/master/operations/automation-script">`Terraform API`</a> and NOT CLI. As part of this the following AWS resources are created:
+In this project we deploy the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region. We will be using Terraform Cloud account for storing the ENV state and its provisiononig purposes. All the Terraform calls are using <a href="https://github.com/hashicorp/terraform-guides/tree/master/operations/automation-script">`Terraform APIs`</a> and NOT CLI. As part of this the following AWS resources are created:
 
 * The script uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>  to provision 3 `t3.micro` EC2 instances in the following Availability Zones and Subnets.
 
@@ -30,6 +30,7 @@ In this project we deploy the `App layer` of <a href="https://github.com/ashwinb
     | subnet-az-2c |  ap-southeast-2c  |
 
 * The script also uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a> to provision a Key pair as well.
+* We will be deploying an AMI which has a basic home page based Web App deployed on Apache Web Server(running on port 80) on all these 3 instances & once we complete this deployment then we also do a very basic check of Web App's home page availability.
 
 <br>
 
@@ -56,7 +57,7 @@ Following are the output values after running the script:
 * You already have/Created Personalized Access Token to access the following GitHub repos through script:
     * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>
     * <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a>
-    * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`Conitno Sample Application`</a>
+    * <a href="https://github.com/ashwinbittu/continoapp">`Conitno Sample Application`</a>
     * <a href="https://github.com/ashwinbittu/managecontinoinfra">`ManageInfra`</a>
 
     Please follow this link to find out how to create Personalized Access Token in GitHub.
