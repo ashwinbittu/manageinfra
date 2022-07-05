@@ -55,29 +55,32 @@ Following are the output values after running the script:
 * You already have an AWS free tier account with Admin access.
 * You already have a Terraform Cloud free tier account. Please follow this link to find out how: 
 * You already created an API Token from the Users section Terraform Cloud free tier account. Please follow this link to find out how: 
-* You already have/Created Personalized Access Tokens for accessing the following GitHub repos through script:
+* You already have/Created Personalized Access Token to access the following GitHub repos through script:
     * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>
     * <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a>
-    * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a>
-    * <a href="https://github.com/ashwinbittu/managecontinoinfra">Conitno Sample Application</a>
+    * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`Conitno Sample Application`</a>
+    * <a href="https://github.com/ashwinbittu/managecontinoinfra">`ManageInfra`</a>
 
-    Please follow this link to find out how to create Personalized Access Tokens in GitHub.
+    Please follow this link to find out how to create Personalized Access Token in GitHub.
 
-* You already have have a AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY pair. Please follow this link to find out how: 
+* You already have have AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY pair which can be used to access the AWS ENV through any CLI. Please follow this link to find out how: 
 
 
 ### Installation
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Get a t2.micro Amazon Linux EC2 Instance
+1. Get a t2.micro Amazon Linux EC2 Instance. This is for Running the script.
 2. Install jq : sudo yum install jq -y
 3. Install git : sudo yum install jq -y
 4. Clone the repo
    ```sh
    git clone https://github.com/ashwinbittu/managecontinoinfra.git
       ```
-3. Give execution permission to manageinfra.sh
+3. Give appropriate permission to the file manageinfra.sh for executing it.
+4. Open the file manageinfra.sh & update the following entries with the values already mentioned in the Prerequisites section.
+    1. 
+5. 
 Install NPM packages
    ```sh
    npm install
