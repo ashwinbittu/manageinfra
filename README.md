@@ -73,7 +73,7 @@ Following are the output values after running the script:
    git clone https://github.com/ashwinbittu/managecontinoinfra.git
       ```
 3. Give appropriate permission to the file manageinfra.sh for executing it.
-4. Open the file manageinfra.sh in vi editor & update the following entries with the values already mentioned in the Prerequisites <p align="right">(<a href="###Prerequisites">Prerequisites</a>)</p> section.
+4. Open the file manageinfra.sh in vi editor & update the following entries with the values already mentioned in the <a href="#Prerequisites">Prerequisites</a> section.
     * TFE_TOKEN="<TFE_TOKEN>" 
     * TFE_ORG="<TFE-ORG>"
     * TFE_ADDR="app.terraform.io"
