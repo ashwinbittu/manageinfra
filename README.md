@@ -28,17 +28,17 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Here Running the script manageInfra.sh deploys the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region.
+In this project we deploy the `App layer` of <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a> on an existing VPC in ap-southeast-2 region. As part of this the following AWS resources are created:
 
-The script uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>  to provision 3 `t3.micro` instances in the following Availability Zones and Subnets.
+* The script uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>  to provision 3 `t3.micro` EC2 instances in the following Availability Zones and Subnets.
 
-| Subnet | Availability Zone |
-|--------|-------------------|
-| subnet-az-2a | ap-southeast-2a |
-| subnet-az-2b | ap-southeast-2b |
-| subnet-az-2c | ap-southeast-2c |
+    |    Subnet    | Availability Zone |
+    |--------------|-------------------|
+    | subnet-az-2a |  ap-southeast-2a  |
+    | subnet-az-2b |  ap-southeast-2b  |
+    | subnet-az-2c |  ap-southeast-2c  |
 
-The script also uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a> to provision a Key pair as well.
+* The script also uses existing Terraform Module <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a> to provision a Key pair as well.
 
 <br>
 
@@ -49,7 +49,7 @@ Following are the input parameters while running the script:
 
 Following are the output values after running the script:
 
-1. List of thre 3 Instance IDs and its Names
+1. List of three 3 EC2 Instance IDs and its Names
 2. Map value of the Key Name, its Private and Public Keys.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
