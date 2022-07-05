@@ -30,7 +30,7 @@
 
 This project does the following:
 
-It uses reuse the `ec2` and `key-pair` modules to provision 3 instances with the following properties passed in as input parameters:
+It uses reuse the <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a> and `key-pair` modules to provision 3 instances with the following properties passed in as input parameters:
 
 - Instance Type: `t3.micro`
 - Tags: Add a `Name` tag that is unique for each instance.
