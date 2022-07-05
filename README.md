@@ -58,11 +58,19 @@ Following are the output values after running the script:
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* You already have an AWS free tier account with Admin access.
+* You already have a Terraform Cloud free tier account. Please follow this link to find out how: 
+* You already created an API Token from the Users section Terraform Cloud free tier account. Please follow this link to find out how: 
+* You already have/Created Personalized Access Tokens for accessing the following GitHub repos through script:
+    * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">`ec2`</a>
+    * <a href="https://github.com/ashwinbittu/terraform-aws-key-pair-contino">`key-pair`</a>
+    * <a href="https://github.com/ashwinbittu/terraform-aws-ec2-contino">Conitno Sample Application</a>
+    * <a href="https://github.com/ashwinbittu/managecontinoinfra">Conitno Sample Application</a>
+
+    Please follow this link to find out how to create Personalized Access Tokens in GitHub.
+
+* You already have have a AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY pair. Please follow this link to find out how: 
+
 
 ### Installation
 
