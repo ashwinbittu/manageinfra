@@ -471,8 +471,8 @@ elif [ "$action" = "repave" ] && [ "$resourcetype" = "ec2" ]; then
 	resourcesection=$6
 	if [ "$repavetype" = "rolling" ]; then
 		haname=$7
-		updateparm=$8
-		targetRegion="${10}"
+		#updateparm=$8
+		#targetRegion="${10}"
 	fi
 	repaveResource "application" "$targetRegion"		
 else
