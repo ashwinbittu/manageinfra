@@ -419,6 +419,10 @@ repaveResource(){
 			echo "inside EC2 Repave-aws_region-->>"$aws_region
 			echo "inside EC2 Repave-haname-->>"$haname
 
+			aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+			aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+			aws configure set aws_region $AWS_REGION
+
 			aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[].Instances[].InstanceId | grep -o '".*"' | sed 's/"//g' > asginsts.txt
 			descap=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[0].DesiredCapacity)
 
