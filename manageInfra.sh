@@ -184,6 +184,7 @@ createConfig(){
 	destroyFlag=$1
 	workspace=$2
 	config_dir=$3
+	sourceWorkspace=$4
 	workspace_id=""
 
 	workspace_id=($(${CURL_CMD} --header "Authorization: Bearer $TFE_TOKEN" --header "Content-Type: application/vnd.api+json" https://${TFE_ADDR}/api/v2/organizations/${TFE_ORG}/workspaces/${workspace} | jq -r '.data.id'))
@@ -202,8 +203,16 @@ createConfig(){
 				else
 					variables_file=${targetRegion}.csv
 				fi
+
 				if [ "$destroyFlag" == "false" ]; then
-					createTFVariables "$workspace" "$variables_file" 
+
+					if [ ! -z "$sourceWorkspace" ]; then
+						#echo "sourceWorkspace-2->>$sourceWorkspace"
+						createTFVariablesfromSource "$2" "$sourceWorkspace"
+					else
+						createTFVariables "$2" "$variables_file" 
+					fi
+
 				fi	
 			fi
 		fi		
@@ -383,6 +392,70 @@ deleteWorkspace(){
 	echo "Response from TFE: ${delete_workspace_result}"
 }
 
+createTFVariablesfromSource(){
+	set -e
+	targworkspace=$1
+	sourceWorksp=$2
+	delimiter=";"
+
+	#echo "targworkspace-->>$targworkspace"
+	#echo "sourceWorksp-->>$sourceWorksp"
+
+	if [ ! -z "$sourceWorksp" ]; then 
+		check_workspace_result=$(${CURL_CMD} --header "Authorization: Bearer $TFE_TOKEN" --header "Content-Type: application/vnd.api+json" "https://${TFE_ADDR}/api/v2/organizations/${TFE_ORG}/workspaces/${sourceWorksp}")
+		if [[ $check_workspace_result != *"404"* ]] ; then
+			workspace_id=$(echo $check_workspace_result | jq .[].id)
+			#echo "workspace_id-***************************->>$workspace_id"
+			if [ ! -z "$workspace_id" ]; then
+
+				#Populating source csv for Temp workspace
+				list_variables_result=$(${CURL_CMD} --header "Authorization: Bearer $TFE_TOKEN" --header "Content-Type: application/vnd.api+json" "https://${TFE_ADDR}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${TFE_ORG}&filter%5Bworkspace%5D%5Bname%5D=${sourceWorksp}")
+				echo $list_variables_result | jq '.data[] | .id'  > varids.txt
+				while read varids; do
+					varid=$(echo "$varids" | sed 's/"//g')
+					#echo "varid-->$varid"
+					if [ ! -z "$varid" ]; then
+
+						key=$(echo $list_variables_result | jq '.data[] | select(.id == "'$varid'") | .attributes.key' | sed 's/"//g') 	
+						value=$(echo $list_variables_result | jq '.data[] | select(.id == "'$varid'") | .attributes.value' | sed 's/"//g') 
+						
+						if [[ $value = *"/"* ]] ; then
+							value=$(echo $value |  sed 's./.\\/.g')
+						elif [[ -z "$value" ]] ; then
+							value=""	
+						elif  [ "$value" == "null" ] ; then
+							value=" "						
+						fi
+						category=$(echo $list_variables_result | jq '.data[] | select(.id == "'$varid'") | .attributes.category' | sed 's/"//g') 
+						hcl=$(echo $list_variables_result | jq '.data[] | select(.id == "'$varid'") | .attributes.hcl' | sed 's/"//g') 
+						sensitive=$(echo $list_variables_result | jq '.data[] | select(.id == "'$varid'") | .attributes.sensitive' | sed 's/"//g') 
+						description=$(echo $list_variables_result | jq '.data[] | select(.id == "'$varid'") | .attributes.description' | sed 's/"//g') 
+
+						#echo "key-->$key"
+						#echo "value-->$value"
+						#echo "category-->$category"
+						#echo "hcl-->$hcl"
+						#echo "sensitive-->$sensitive"
+						#echo "description-->$description"
+
+						lines=$key';'$value';'$category';'$hcl';'$sensitive';'$description
+
+						echo $lines >> variables_file					
+					fi
+				done < varids.txt
+
+				#cat variables_file
+
+				createTFVariables ${targworkspace} "variables_file"	
+			else
+				echo "Workspace not found in createTFVariablesfromSource!!"
+				exit 1
+			fi
+		fi		
+	fi
+	#rm -rf varids.txt
+}
+
 repaveResource(){
 	echo "Inside repaveResource"
 
@@ -408,15 +481,16 @@ repaveResource(){
 
 			echo "Inside EC2 Repave-appname-env-targetRegion-componenet-->>"$appname-$env-$targetRegion-$componenet
 
-			manageTFWorkspace "$appname-$env-$targetRegion-$componenet-temp" 	
-			createConfig "false" "$appname-$env-$targetRegion-$componenet-temp" "$execdir/tempdir/$componenet" "$appname-$env-$targetRegion-$componenet"
+			manageTFWorkspace "$appname-$env-$targetRegion-$componenet" 	
+			#createConfig "false" "$appname-$env-$targetRegion-$componenet" "$execdir/tempdir/$componenet" "$appname-$env-$targetRegion-$componenet"
+			createConfig "false" "$appname-$env-$targetRegion-$componenet" "$execdir/tempdir/$componenet"
 
 			aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[].Instances[].InstanceId | grep -o '".*"' | sed 's/"//g' > asginsts.txt
 			descap=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[0].DesiredCapacity)
 
 			#updateTFVariables "$appname-$env-$targetRegion-$componenet" "aws_region" "$targetRegion" "terraform" "false" "false" "Preferred region"
 
-			runTFWorkspace "$appname-$env-$targetRegion-$componenet-temp" "false"		
+			runTFWorkspace "$appname-$env-$targetRegion-$componenet" "false"		
 
 			while read asginstid; do
 				aws autoscaling set-desired-capacity --auto-scaling-group-name $haname --desired-capacity  $(( $descap + 1 ))
