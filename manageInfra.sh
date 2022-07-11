@@ -408,33 +408,15 @@ repaveResource(){
 
 			echo "Inside EC2 Repave-appname-env-targetRegion-componenet-->>"$appname-$env-$targetRegion-$componenet
 
-			manageTFWorkspace "$appname-$env-$targetRegion-$componenet" 	
-			createConfig "false" "$appname-$env-$targetRegion-$componenet" "$execdir/tempdir/$componenet" "$appname-$env-$targetRegion-$componenet"
-			
-
-			#Getting existing Instance IDs 
-
-			echo "inside EC2 Repave-AWS_ACCESS_KEY_ID-->>"$AWS_ACCESS_KEY_ID
-			echo "inside EC2 Repave-AWS_SECRET_ACCESS_KEY-->>"$AWS_SECRET_ACCESS_KEY
-			echo "inside EC2 Repave-AWS_ACCESAWS_REGIONS_KEY_ID-->>"$AWS_REGION
-			echo "inside EC2 Repave-aws_region-->>"$aws_region
-			echo "inside EC2 Repave-haname-->>"$haname
-
-			aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-			aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-			aws configure set aws_region $AWS_REGION
+			manageTFWorkspace "$appname-$env-$targetRegion-$componenet-temp" 	
+			createConfig "false" "$appname-$env-$targetRegion-$componenet-temp" "$execdir/tempdir/$componenet" "$appname-$env-$targetRegion-$componenet"
 
 			aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[].Instances[].InstanceId | grep -o '".*"' | sed 's/"//g' > asginsts.txt
 			descap=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[0].DesiredCapacity)
 
-			#if [ "$resourcesection" = "amiupdate" ]; then
-			#	echo "Inside Repaving AMI"		
-			#	updateTFVariables "$appname-$env-$targetRegion-$componenet" "app_version" "$updateparm" "terraform" "false" "false" "APP Version"						
-			#fi	
-
 			#updateTFVariables "$appname-$env-$targetRegion-$componenet" "aws_region" "$targetRegion" "terraform" "false" "false" "Preferred region"
 
-			runTFWorkspace "$appname-$env-$targetRegion-$componenet" "false"		
+			runTFWorkspace "$appname-$env-$targetRegion-$componenet-temp" "false"		
 
 			while read asginstid; do
 				aws autoscaling set-desired-capacity --auto-scaling-group-name $haname --desired-capacity  $(( $descap + 1 ))
