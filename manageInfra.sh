@@ -13,6 +13,7 @@ export REPO_FID=$REPO_FID
 export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 export AWS_REGION=$AWS_REGION
+export aws_region=$AWS_REGION
 
 export targetRegion=$AWS_REGION
 
@@ -404,11 +405,20 @@ repaveResource(){
 			initiateTempFolders
 			cd $execdir/tempdir
 
+			echo "Inside EC2 Repave-appname-env-targetRegion-componenet-->>"$appname-$env-$targetRegion-$componenet
+
 			manageTFWorkspace "$appname-$env-$targetRegion-$componenet" 	
 			createConfig "false" "$appname-$env-$targetRegion-$componenet" "$execdir/tempdir/$componenet" "$appname-$env-$targetRegion-$componenet"
 			
 
 			#Getting existing Instance IDs 
+
+			echo "inside EC2 Repave-AWS_ACCESS_KEY_ID-->>"$AWS_ACCESS_KEY_ID
+			echo "inside EC2 Repave-AWS_SECRET_ACCESS_KEY-->>"$AWS_SECRET_ACCESS_KEY
+			echo "inside EC2 Repave-AWS_ACCESAWS_REGIONS_KEY_ID-->>"$AWS_REGION
+			echo "inside EC2 Repave-aws_region-->>"$aws_region
+			echo "inside EC2 Repave-haname-->>"$haname
+
 			aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[].Instances[].InstanceId | grep -o '".*"' | sed 's/"//g' > asginsts.txt
 			descap=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[0].DesiredCapacity)
 
