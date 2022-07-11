@@ -1,18 +1,23 @@
 #!/bin/bash
 
-export TFE_TOKEN="<TFE_TOKEN>" #YOU NEED TO CREATE USER BASED TOKEN(Terraform Cloud WEBUI/User/settings/Tokens) OR CONFIG CREATION WILL FAIL
-export TFE_ORG="<TFE-ORG>"
-export TFE_ADDR="app.terraform.io"
-export execdir="<SCRIPT-EXEC-DIR>"
+export TFE_TOKEN=$TFE_TOKEN
+export TFE_ORG=$TFE_ORG
+export TFE_ADDR=$TFE_ADDR
+export execdir="$PWD"
 export CURL_CMD="curl -ks"
 export PATH=$PATH:$execdir
 
-export REPO_API_TOKEN="<GITHUB_Personal Access Token>" 
-export REPO_FID="<GITHUB_USER_ID>"
+export REPO_API_TOKEN=$REPO_API_TOKEN 
+export REPO_FID=$REPO_FID
 
-export AWS_ACCESS_KEY_ID="<AWS_ACCESS_KEY_ID>"
-export AWS_SECRET_ACCESS_KEY="<AWS_SECRET_ACCESS_KEY>"
-export AWS_REGION="<AWS_REGION>"
+export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+export AWS_REGION=$AWS_REGION
+
+export targetRegion=$AWS_REGION
+
+export env=$env
+export appname=$appname
 
 initiateTempFolders(){
 	repo=""	
@@ -36,7 +41,7 @@ getTFVariableVal(){
 	workspace=$1
 	key=$2
 	category=$3
-	#echo "workspace-->$workspace"
+	#echo "workspace-->$workspace"	
 	#echo "key-->$key"
 	#echo "category-->$category"
 	varvalue=""
@@ -383,11 +388,11 @@ appname=$3
 targetRegion=$4
 
 if [ "$action" = "create" ]; then  
-	manageAll "network" "$targetRegion"	"false"	"true" "false"
+	#manageAll "network" "$targetRegion"	"false"	"true" "false"
 	#manageAll "storage" "$targetRegion"	"false" "true" "false"
 	manageAll "application" "$targetRegion"	"false"	"true" "false"
 elif [ "$action" = "destroy" ]; then
 	manageAll "application" "$targetRegion"	"true" "false" "false"
 	#manageAll "storage" "$targetRegion"	"true" "false" "false"
-	manageAll "network" "$targetRegion"	"true" "false" "false"	
+	#manageAll "network" "$targetRegion"	"true" "false" "false"	
 fi
