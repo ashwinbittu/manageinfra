@@ -390,7 +390,10 @@ repaveResource(){
 
 		componenet=$1
 		targetRegion=$2
-		
+
+		echo "Inside EC2 Repave-componenet-->>"$componenet
+		echo "Inside EC2 Repave-targetRegion-->>"$targetRegion
+
 		if [ "$repavetype" = "rolling" ]; then	
 			echo "Inside Rolling Repave"
 
