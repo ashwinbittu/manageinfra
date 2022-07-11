@@ -381,6 +381,74 @@ deleteWorkspace(){
 	echo "Response from TFE: ${delete_workspace_result}"
 }
 
+repaveResource(){
+	echo "Inside repaveResource"
+
+	if [ "$resourcetype" = "ec2" ]; then	
+
+		echo "Inside EC2 Repave"
+
+		componenet="application"
+		initFolders
+
+
+		if [ "$repavetype" = "rolling" ]; then	
+			echo "Inside Rolling Repave"
+
+			#Creating a NEW Temp Application Workspace/ENV with original config
+			#manageAll "application" "$targetRegion"	"false"	"true" "true" "$targetRegion"
+						
+			#Repaving the original Application Workspace/ENV
+			initiateTempFolders
+			cd $execdir/tempdir
+
+			manageTFWorkspace "$appname-$env-$targetRegion-$componenet" 	
+			createConfig "false" "$appname-$env-$targetRegion-$componenet" "$execdir/tempdir/$componenet" "$appname-$env-$targetRegion-$componenet"
+			
+
+			#Getting existing Instance IDs 
+			aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[].Instances[].InstanceId | grep -o '".*"' | sed 's/"//g' > asginsts.txt
+			descap=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $haname --query AutoScalingGroups[0].DesiredCapacity)
+
+			#if [ "$resourcesection" = "amiupdate" ]; then
+			#	echo "Inside Repaving AMI"		
+			#	updateTFVariables "$appname-$env-$targetRegion-$componenet" "app_version" "$updateparm" "terraform" "false" "false" "APP Version"						
+			#fi	
+
+			#updateTFVariables "$appname-$env-$targetRegion-$componenet" "aws_region" "$targetRegion" "terraform" "false" "false" "Preferred region"
+
+			runTFWorkspace "$appname-$env-$targetRegion-$componenet" "false"		
+
+			while read asginstid; do
+				aws autoscaling set-desired-capacity --auto-scaling-group-name $haname --desired-capacity  $(( $descap + 1 ))
+				echo "Increasing Desired Capacity--->>>$descap---TO----"$(( $descap + 1 ))
+				echo "Giving 60 Seconds on new Instnace to come up & Registration to ELB"
+				sleep 60
+				insatance_check_result=$(aws autoscaling describe-auto-scaling-instances --instance-ids $asginstid)
+				if [[ $insatance_check_result = *"InstanceId"* ]] ; then
+					echo "Detaching Old Instance-->>$asginstid AND Increasing Desired Capacity To Exact configuration"
+					aws autoscaling detach-instances --instance-ids $asginstid --auto-scaling-group-name $haname --should-decrement-desired-capacity
+					echo "Giving 60 Seconds for old Instnace to detach without downtime + Un-Registration from ELB"
+					sleep 60
+					echo "Terminating the detached EC2 instance"
+					aws ec2 terminate-instances --instance-ids $asginstid
+					aws ec2 wait instance-terminated --instance-ids $asginstid
+				else
+					echo "InstanceId $asginstid Not part of Auto Scalling Group"
+					aws autoscaling set-desired-capacity --auto-scaling-group-name $haname --desired-capacity  $(( $descap - 1 ))	
+				fi	
+			done < asginsts.txt	
+
+					
+			#Destroying Temp Application Workspace/ENV & Deleting the Temp Workspace	    		
+			#manageAll "$componenet" "$targetRegion"	"true" "false" "true"
+			#sleep 15
+			#deleteWorkspace "$appname-$env-$targetRegion-$componenet-temp"
+
+		fi		
+	
+	fi	
+}
 
 action=$1
 env=$2
@@ -395,4 +463,15 @@ elif [ "$action" = "destroy" ]; then
 	manageAll "application" "$targetRegion"	"true" "false" "false"
 	#manageAll "storage" "$targetRegion"	"true" "false" "false"
 	#manageAll "network" "$targetRegion"	"true" "false" "false"	
+elif [ "$action" = "repave" ] && [ "$resourcetype" = "ec2" ]; then
+	repavetype=$5
+	resourcesection=$6
+	if [ "$repavetype" = "rolling" ]; then
+		haname=$7
+		updateparm=$8
+		targetRegion="${10}"
+	fi
+	repaveResource		
+else
+	echo "Clean Up"
 fi
