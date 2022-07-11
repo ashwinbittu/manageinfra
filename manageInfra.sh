@@ -530,13 +530,13 @@ appname=$3
 targetRegion=$4
 
 if [ "$action" = "create" ]; then  
-	#manageAll "network" "$targetRegion"	"false"	"true" "false"
+	manageAll "network" "$targetRegion"	"false"	"true" "false"
 	#manageAll "storage" "$targetRegion"	"false" "true" "false"
 	manageAll "application" "$targetRegion"	"false"	"true" "false"
 elif [ "$action" = "destroy" ]; then
 	manageAll "application" "$targetRegion"	"true" "false" "false"
 	#manageAll "storage" "$targetRegion"	"true" "false" "false"
-	#manageAll "network" "$targetRegion"	"true" "false" "false"	
+	manageAll "network" "$targetRegion"	"true" "false" "false"	
 elif [ "$action" = "repave" ] && [ "$resourcetype" = "ec2" ]; then
 	repavetype=$5
 	resourcesection=$6
