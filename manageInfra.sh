@@ -388,10 +388,9 @@ repaveResource(){
 
 		echo "Inside EC2 Repave"
 
-		componenet="application"
-		initFolders
-
-
+		componenet=$1
+		targetRegion=$2
+		
 		if [ "$repavetype" = "rolling" ]; then	
 			echo "Inside Rolling Repave"
 
@@ -450,6 +449,7 @@ repaveResource(){
 	fi	
 }
 
+
 action=$1
 env=$2
 appname=$3
@@ -471,7 +471,7 @@ elif [ "$action" = "repave" ] && [ "$resourcetype" = "ec2" ]; then
 		updateparm=$8
 		targetRegion="${10}"
 	fi
-	repaveResource		
+	repaveResource "application" "$targetRegion"		
 else
 	echo "Clean Up"
 fi
